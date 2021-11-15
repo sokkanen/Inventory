@@ -16,6 +16,11 @@ Following with:
 
     docker run --name inventorydb -p 5432:5432 -e POSTGRES_PASSWORD=password123 -e POSTGRES_USER=inventoryuser -e POSTGRES_DB=inventorydb postgres
 
+Running JAR
+-
+    java -DINVENTORY_POSTGRES_URL="<postgres_host>" -jar <jarname>
+
+
 API endpoints
 -
 
