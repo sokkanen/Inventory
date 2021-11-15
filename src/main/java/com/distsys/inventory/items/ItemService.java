@@ -1,9 +1,11 @@
 package com.distsys.inventory.items;
 
+import org.aspectj.weaver.ast.Or;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -47,7 +49,8 @@ public class ItemService {
     }
 
     public List<VerifyDto> verifyOrder(List<OrderDto> dtos ) {
-        return dtos.stream().map(dto -> {
+        List<OrderDto> distinctDtos = mergeDuplicates(dtos);
+        return distinctDtos.stream().map(dto -> {
             Item item = findById(dto.getId());
             return item == null ?
                     new VerifyDto(
@@ -66,7 +69,8 @@ public class ItemService {
     }
 
     public List<VerifyDto> performOrder(List<OrderDto> dtos ) {
-        return dtos.stream().map(dto -> {
+        List<OrderDto> distinctDtos = mergeDuplicates(dtos);
+        return distinctDtos.stream().map(dto -> {
             Item item = findById(dto.getId());
             if (item == null) {
                 return new VerifyDto(dto.getId(), 0L, 0L, VerifyDto.Status.UNKNOWN_ITEM);
@@ -78,5 +82,19 @@ public class ItemService {
             }
             return new VerifyDto(dto.getId(), dto.getAmount(), item.getStock(), status);
         }).collect(Collectors.toList());
+    }
+
+    private List<OrderDto> mergeDuplicates(List<OrderDto> dtos) {
+        List<Long> ids = dtos
+                .stream()
+                .map(d -> d.getId())
+                .distinct()
+                .collect(Collectors.toList());
+        List<OrderDto> distinctDtos = new ArrayList<>();
+        ids.stream().forEach(id -> {
+            Long amount = dtos.stream().filter(d -> d.getId() == id).mapToLong(d -> d.getAmount()).sum();
+            distinctDtos.add(new OrderDto(id, amount));
+        });
+        return distinctDtos;
     }
 }
