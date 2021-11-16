@@ -1,4 +1,4 @@
-package com.distsys.inventory.items;
+package com.distsys.inventory.products;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,7 +10,7 @@ import javax.persistence.Entity;
 
 @Entity
 @NoArgsConstructor @AllArgsConstructor @Data
-public class Item extends AbstractPersistable<Long> {
+public class Product extends AbstractPersistable<Long> {
     @Column(unique=true)
     private String name;
     private Long stock;

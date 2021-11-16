@@ -38,6 +38,8 @@ Search by name:
 
 Create a new item:
 
+body: { name: string, stock: number, price: number }
+
     POST /api/v1/products
 
 Get single item:

@@ -1,4 +1,4 @@
-package com.distsys.inventory.items;
+package com.distsys.inventory.products;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,26 +9,26 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/products")
-public class ItemController {
+public class ProductController {
 
     @Autowired
-    ItemService itemService;
+    ProductService productService;
 
     @GetMapping("")
     public ResponseEntity listItems() {
-        List<Item> items = itemService.findAll();
+        List<Product> items = productService.findAll();
         return new ResponseEntity<>(items, HttpStatus.OK);
     }
 
     @GetMapping("/search")
     public ResponseEntity searchItems(@RequestParam String keyword) {
-        List<Item> items = itemService.findItemsByKeyword(keyword);
+        List<Product> items = productService.findItemsByKeyword(keyword);
         return new ResponseEntity<>(items, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity getSingleItem(@PathVariable Long id) {
-        Item item = itemService.findById(id);
+        Product item = productService.findById(id);
         return new ResponseEntity<>(item, HttpStatus.OK);
     }
 
@@ -39,7 +39,7 @@ public class ItemController {
      */
     @PostMapping("/verify")
     public ResponseEntity<List<VerifyDto>> verifyOrder(@RequestBody List<OrderDto> orderItems) {
-        List<VerifyDto> statuses = itemService.verifyOrder(orderItems);
+        List<VerifyDto> statuses = productService.verifyOrder(orderItems);
         return new ResponseEntity<>(statuses, HttpStatus.OK);
     }
 
@@ -50,13 +50,13 @@ public class ItemController {
      */
     @PostMapping("/order")
     public ResponseEntity<List<VerifyDto>> performOrder(@RequestBody List<OrderDto> orderItems) {
-        List<VerifyDto> statuses = itemService.performOrder(orderItems);
+        List<VerifyDto> statuses = productService.performOrder(orderItems);
         return new ResponseEntity<>(statuses, HttpStatus.OK);
     }
 
     @PostMapping("")
-    public ResponseEntity createNewItem(@RequestBody Item item) {
-        itemService.save(item);
+    public ResponseEntity createNewItem(@RequestBody Product item) {
+        productService.save(item);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -67,14 +67,14 @@ public class ItemController {
      * @return Item with set parameters
      */
     @PutMapping("/{id}")
-    public ResponseEntity setItemPriceAndAmount(@PathVariable Long id, @RequestBody Item item) {
-        Item modifiedItem = itemService.modifyItem(item);
+    public ResponseEntity setItemPriceAndAmount(@PathVariable Long id, @RequestBody Product item) {
+        Product modifiedItem = productService.modifyItem(item);
         return new ResponseEntity<>(modifiedItem, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity removeSingleItem(@PathVariable Long id) {
-        itemService.deleteItemById(id);
+        productService.deleteItemById(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

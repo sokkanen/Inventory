@@ -1,4 +1,4 @@
-package com.distsys.inventory.items;
+package com.distsys.inventory.products;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
