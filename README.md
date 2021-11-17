@@ -20,6 +20,21 @@ Running JAR
 -
     java -DINVENTORY_POSTGRES_URL="<postgres_host>" -jar <jarname>
 
+Docker
+-
+
+Create a new snapshot JAR:
+
+    mvn clean verify
+
+Create a container
+
+    docker build -t inventory .
+
+Run container
+
+    docker run -d inventory
+
 
 API endpoints
 -
