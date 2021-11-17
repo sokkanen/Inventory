@@ -56,8 +56,13 @@ public class ProductController {
 
     @PostMapping("")
     public ResponseEntity createNewItem(@RequestBody Product item) {
-        productService.save(item);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        try {
+            Product product = productService.save(item);
+            return new ResponseEntity<>(product == null ? HttpStatus.CONFLICT : HttpStatus.CREATED);
+        } catch (Exception error) {
+            System.out.println(error.getMessage());
+            return new ResponseEntity<>(error.getMessage(), HttpStatus.CONFLICT);
+        }
     }
 
     /**
