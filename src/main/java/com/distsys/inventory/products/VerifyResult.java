@@ -5,8 +5,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @AllArgsConstructor @NoArgsConstructor @Data
-public class VerifyDto {
+public class VerifyResult {
     private Long id;
+    private String name;
     private Long amount;
     private Long available;
     private Status status;

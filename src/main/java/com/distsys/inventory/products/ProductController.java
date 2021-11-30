@@ -38,8 +38,8 @@ public class ProductController {
      * @return A List of VerifyDto's
      */
     @PostMapping("/verify")
-    public ResponseEntity<List<VerifyDto>> verifyOrder(@RequestBody List<OrderDto> orderItems) {
-        List<VerifyDto> statuses = productService.verifyOrder(orderItems);
+    public ResponseEntity<List<VerifyResult>> verifyOrder(@RequestBody List<OrderDto> orderItems) {
+        List<VerifyResult> statuses = productService.verifyOrder(orderItems);
         return new ResponseEntity<>(statuses, HttpStatus.OK);
     }
 
@@ -49,8 +49,8 @@ public class ProductController {
      * @return A List of VerifyDto's
      */
     @PostMapping("/order")
-    public ResponseEntity<List<VerifyDto>> performOrder(@RequestBody List<OrderDto> orderItems) {
-        List<VerifyDto> statuses = productService.performOrder(orderItems);
+    public ResponseEntity<List<VerifyResult>> performOrder(@RequestBody List<OrderDto> orderItems) {
+        List<VerifyResult> statuses = productService.performOrder(orderItems);
         return new ResponseEntity<>(statuses, HttpStatus.OK);
     }
 

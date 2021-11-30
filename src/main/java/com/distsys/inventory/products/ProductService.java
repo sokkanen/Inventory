@@ -47,39 +47,41 @@ public class ProductService {
         return itemFromDb;
     }
 
-    public List<VerifyDto> verifyOrder(List<OrderDto> dtos ) {
+    public List<VerifyResult> verifyOrder(List<OrderDto> dtos ) {
         List<OrderDto> distinctDtos = mergeDuplicates(dtos);
         return distinctDtos.stream().map(dto -> {
             Product item = findById(dto.getId());
             return item == null ?
-                    new VerifyDto(
+                    new VerifyResult(
                             dto.getId(),
+                            "",
                             0L,
                             0L,
-                            VerifyDto.Status.UNKNOWN_ITEM
+                            VerifyResult.Status.UNKNOWN_ITEM
                     ) :
-                    new VerifyDto(
+                    new VerifyResult(
                             dto.getId(),
+                            item.getName(),
                             dto.getAmount(),
                             item.getStock(),
-                            item.getStock() >= dto.getAmount() ? VerifyDto.Status.OK : VerifyDto.Status.NOT_OK
+                            item.getStock() >= dto.getAmount() ? VerifyResult.Status.OK : VerifyResult.Status.NOT_OK
                     );
         }).collect(Collectors.toList());
     }
 
-    public List<VerifyDto> performOrder(List<OrderDto> dtos ) {
+    public List<VerifyResult> performOrder(List<OrderDto> dtos ) {
         List<OrderDto> distinctDtos = mergeDuplicates(dtos);
         return distinctDtos.stream().map(dto -> {
             Product item = findById(dto.getId());
             if (item == null) {
-                return new VerifyDto(dto.getId(), 0L, 0L, VerifyDto.Status.UNKNOWN_ITEM);
+                return new VerifyResult(dto.getId(), "", 0L, 0L, VerifyResult.Status.UNKNOWN_ITEM);
             }
-            VerifyDto.Status status = item.getStock() >= dto.getAmount() ? VerifyDto.Status.OK : VerifyDto.Status.NOT_OK;
-            if (status == VerifyDto.Status.OK) {
+            VerifyResult.Status status = item.getStock() >= dto.getAmount() ? VerifyResult.Status.OK : VerifyResult.Status.NOT_OK;
+            if (status == VerifyResult.Status.OK) {
                 item.setStock(item.getStock() - dto.getAmount());
                 productRepository.save(item);
             }
-            return new VerifyDto(dto.getId(), dto.getAmount(), item.getStock(), status);
+            return new VerifyResult(dto.getId(), item.getName(), dto.getAmount(), item.getStock(), status);
         }).collect(Collectors.toList());
     }
 
