@@ -17,6 +17,7 @@ public class ProductService {
 
     @Transactional
     public Product save(Product item) {
+        validateProduct(item);
         return productRepository.save(item);
     }
 
@@ -97,5 +98,12 @@ public class ProductService {
             distinctDtos.add(new OrderDto(id, amount));
         });
         return distinctDtos;
+    }
+
+    private void validateProduct(Product product) {
+        // Product with stock of 0 can be added
+        if (product.getName().isEmpty() || product.getPrice().equals(0) || product.getId().equals(0)) {
+            throw new ProductException();
+        }
     }
 }

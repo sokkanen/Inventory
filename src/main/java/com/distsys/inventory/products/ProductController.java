@@ -60,8 +60,11 @@ public class ProductController {
             Product product = productService.save(item);
             return new ResponseEntity<>(product == null ? HttpStatus.CONFLICT : HttpStatus.CREATED);
         } catch (Exception error) {
+            if (error.getClass().equals(ProductException.class)) {
+                return new ResponseEntity<>(error.getMessage(), HttpStatus.BAD_REQUEST);
+            }
             System.out.println(error.getMessage());
-            return new ResponseEntity<>(error.getMessage(), HttpStatus.CONFLICT);
+            return new ResponseEntity<>(error.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
