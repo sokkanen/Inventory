@@ -22,7 +22,7 @@ public class ProductController {
 
     @GetMapping("/search")
     public ResponseEntity searchItems(@RequestParam String keyword) {
-        List<Product> items = productService.findItemsByKeyword(keyword);
+        List<Product> items = productService.findProductsByKeyword(keyword);
         return new ResponseEntity<>(items, HttpStatus.OK);
     }
 
