@@ -5,6 +5,8 @@ This application is a part of academic work, demonstrating a distributed system.
 
 **NO SECURITY IS IN PLACE, SO NOT TO BE USED IN PRODUCTION!**
 
+Tested and working with OpenJDK 11.0.13 and Maven 3.6.3
+
 Running Dockerized PostgreSQL 13.5. alongside application:
 -
 
@@ -23,7 +25,7 @@ Running JAR
 Docker
 -
 
-Create a new snapshot JAR:
+Create a new snapshot JAR
 
     mvn clean verify
 

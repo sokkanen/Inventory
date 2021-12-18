@@ -16,9 +16,9 @@ public class ProductService {
     private ProductRepository productRepository;
 
     @Transactional
-    public Product save(Product item) {
-        validateProduct(item);
-        return productRepository.save(item);
+    public Product save(Product product) {
+        validateProduct(product);
+        return productRepository.save(product);
     }
 
     @Transactional
@@ -30,29 +30,29 @@ public class ProductService {
         return productRepository.findAll();
     }
 
-    public List<Product> findItemsByKeyword(String keyword) {
+    public List<Product> findProductsByKeyword(String keyword) {
         return productRepository.findByNameContaining(keyword);
     }
 
     public Product findById(Long id) {
-        Optional<Product> possibleItem = productRepository.findById(id);
-        return possibleItem.isPresent() ? possibleItem.get() : null;
+        Optional<Product> possibleProduct = productRepository.findById(id);
+        return possibleProduct.isPresent() ? possibleProduct.get() : null;
     }
 
     @Transactional
-    public Product modifyItem(Product item) {
-        Product itemFromDb = productRepository.findByName(item.getName());
-        itemFromDb.setStock(item.getStock());
-        itemFromDb.setPrice(item.getPrice());
-        productRepository.save(itemFromDb);
-        return itemFromDb;
+    public Product modifyItem(Product product) {
+        Product productFromDb = productRepository.findByName(product.getName());
+        productFromDb.setStock(product.getStock());
+        productFromDb.setPrice(product.getPrice());
+        productRepository.save(productFromDb);
+        return productFromDb;
     }
 
     public List<VerifyResult> verifyOrder(List<OrderDto> dtos ) {
         List<OrderDto> distinctDtos = mergeDuplicates(dtos);
         return distinctDtos.stream().map(dto -> {
-            Product item = findById(dto.getId());
-            return item == null ?
+            Product product = findById(dto.getId());
+            return product == null ?
                     new VerifyResult(
                             dto.getId(),
                             "",
@@ -62,10 +62,10 @@ public class ProductService {
                     ) :
                     new VerifyResult(
                             dto.getId(),
-                            item.getName(),
+                            product.getName(),
                             dto.getAmount(),
-                            item.getStock(),
-                            item.getStock() >= dto.getAmount() ? VerifyResult.Status.OK : VerifyResult.Status.NOT_OK
+                            product.getStock(),
+                            product.getStock() >= dto.getAmount() ? VerifyResult.Status.OK : VerifyResult.Status.NOT_OK
                     );
         }).collect(Collectors.toList());
     }
